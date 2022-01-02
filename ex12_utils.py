@@ -33,3 +33,4 @@ def max_score_paths(board, words):
 
 if __name__ == "__main__":
     print(is_valid_path([["a","b","c"],["d","e","f"],["g","h","i"]], [(0,0),(0,1),(0,2)], ["ccc"]))
+
