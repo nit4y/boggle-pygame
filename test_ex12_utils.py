@@ -366,7 +366,8 @@ class TestFindWords:
                  ['Q', 'Q', 'Q', 'Q']]
         word_dict = {'DOGS': True}
         expected = [[(1, 0), (1, 1)]]
-        assert find_length_n_paths(2, board, word_dict) == expected
+        actual = find_length_n_paths(2, board, word_dict)
+        assert actual == expected
 
     def test_does_not_split_cells(self):
         board = [['Q', 'Q', 'Q', 'Q'],
@@ -573,3 +574,19 @@ class TestFindWords:
         assert sorted(find_length_n_words(4, board, word_dict)) == sorted(expected_4)
         assert sorted(find_length_n_words(5, board, word_dict)) == sorted(expected_5)
         assert sorted(find_length_n_words(6, board, word_dict)) == sorted(expected_6)
+
+
+if __name__ == "__main__":
+    t1 = TestIsValidPath()
+    
+    #public_method_names = [method for method in dir(t1) if callable(getattr(t1, method)) if not method.startswith('_')]  # 'private' methods start from _
+    #for method in public_method_names:
+    #    getattr(t1, method)()  # call
+    
+    t2 = TestFindWords()
+    #t2.test_multi_letter_cells()
+    t2.test_basic_rows()
+    #public_method_names = [method for method in dir(t2) if callable(getattr(t2, method)) if not method.startswith('_')]  # 'private' methods start from _
+    #for method in public_method_names:
+    #    getattr(t2, method)()  # call
+    
