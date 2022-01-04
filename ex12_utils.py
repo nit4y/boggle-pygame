@@ -1,6 +1,26 @@
 from typing import Tuple
 import consts
 
+def filter_words(board, words, n):
+    essential_chars = []
+    filtered_words = []
+    for row in board:
+        for cell in row:
+            essential_chars.append(cell)
+    for word in words:
+        if 2*n >= len(word) >= n :
+            add = True
+            for c in word:
+                if c not in word:
+                    add = False
+                    break
+            if add:
+                filtered_words.append(word)
+    return filtered_words
+                    
+        
+
+
 def __is_near_previous(previous, current):
     cur_y, cur_x = current[0], current[1]
     prev_y, prev_x = previous[0], previous[1]
@@ -48,21 +68,26 @@ def _are_locations_legal(locations: list[(int,int)]) -> bool:
 
 
 def __find_length_n_paths_core(x, y, curr_word, n, board, words, used_locations, paths):
+    if len(curr_word) > 16*2 or len(used_locations) > 16:
+        return
     if (y,x) in used_locations or words == [] or len(used_locations) > n or x > 3 or x < 0 or y > 3 or y < 0:
         return
     
     if len(used_locations) == n and curr_word in words:
-        return used_locations
+        if used_locations not in paths:
+            paths.append(used_locations)
+        return
     
-    for y_mod in [0, 1, -1]:
-        for x_mod in [0, 1, -1]:
-            potential_path = __find_length_n_paths_core(x+1*x_mod, y+1*y_mod, curr_word + board[y][x], n, board, [w for w in words if w.startswith(curr_word)], used_locations + [(y,x)], paths)
-            if potential_path is not None and potential_path not in paths:
-                paths.append(potential_path)
+    for direction in consts.DIRECTIONS:
+        y, x = ( y + direction[0], x + direction[1])
+    #for y_mod in [0, 1, -1]:
+    #    for x_mod in [0, 1, -1]:
+        __find_length_n_paths_core(x, y, curr_word + board[y][x], n, board, [w for w in words if w.startswith(curr_word)], used_locations + [(y,x)], paths)
 
 
 def find_length_n_paths(n, board, words):
     paths = []
+    words = filter_words(board, words, n)
     for y in range(4):
         for x in range(4):
             __find_length_n_paths_core(x, y , "", n, board, words, [], paths)
@@ -86,7 +111,7 @@ def _find_length_n_words_core(n, board, cur_location, used_locations, word, word
 
     for direction in consts.DIRECTIONS:
         new_location = ( y + direction[0], x + direction[1])
-        _find_length_n_words_core(n,board,new_location,used_locations[:], word[:], words, correct_paths)
+        _find_length_n_words_core(n,board, new_location, used_locations[:], word[:], words, correct_paths)
 
 
 def find_length_n_words(n, board, words):
