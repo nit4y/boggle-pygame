@@ -71,16 +71,16 @@ def _are_locations_legal(locations: list[(int,int)]) -> bool:
 
 def find_length_n_paths(n, board, words):
     paths = []
-    words = filter_words(board, words, n)
+    words = set(filter_words(board, words, n))
     for y in range(4):
         for x in range(4):
-            __find_length_n_paths_core(x, y , "", n, board, set(words), [], paths)
+            __find_length_n_paths_core(x, y , "", n, board, words, [], paths)
     return paths
 
 def __find_length_n_paths_core(x, y, curr_word, n, board, words, used_locations, paths):
     if len(curr_word) > 32 or len(used_locations) > 16:
         return
-    if (y,x) in used_locations or words == [] or len(used_locations) > n or x > 3 or x < 0 or y > 3 or y < 0:
+    if (y,x) in used_locations or len(used_locations) > n or x > 3 or x < 0 or y > 3 or y < 0:
         return
     
     if len(used_locations) == n and curr_word in words:
@@ -88,8 +88,6 @@ def __find_length_n_paths_core(x, y, curr_word, n, board, words, used_locations,
             paths.append(used_locations)
         return
     
-    #for direction in consts.DIRECTIONS:
-    #    y, x = ( y + direction[0], x + direction[1])
     for y_mod in [0, 1, -1]:
         for x_mod in [0, 1, -1]:
             __find_length_n_paths_core(x + 1*x_mod , y + 1*y_mod, curr_word + board[y][x], n, board, words, used_locations + [(y,x)], paths)
@@ -105,7 +103,7 @@ def find_length_n_words(n, board, words):
     correct_paths = [] #initalizing list we will return
     for y in range(4):
         for x in range(4):
-            _find_length_n_words_core(n,board,(y,x),[],"",words_with_n_length,correct_paths)
+            _find_length_n_words_core(n,board, (y,x), [], "", words_with_n_length,correct_paths)
     return correct_paths
 
 def _find_length_n_words_core(n, board, cur_location, used_locations, word, words, correct_paths):
