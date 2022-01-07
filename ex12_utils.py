@@ -21,20 +21,17 @@ def filter_words(board, words, n):
     return filtered_words
                     
 
-def filter_words_for_max_score(board, words):
+def _filter_words_for_max_score(board, words):
     essential_chars = []
     filtered_words = []
     for row in board:
         for cell in row:
             essential_chars.append(cell)
     for word in words:
-        add = True
-        for c in word:
-            if c not in essential_chars:
-                add = False
+        for char in word:
+            if char in essential_chars:
+                filtered_words.append(word)
                 break
-        if add:
-            filtered_words.append(word)
     return filtered_words
 
 
@@ -146,17 +143,21 @@ def _find_length_n_words_core(n, board, cur_location, used_locations, word, word
 
 
 def max_score_paths(board, words):
-    words = filter_words_for_max_score(board, words)
+    words = _filter_words_for_max_score(board, words)
+    max_word_length = 0 #initlazing
+    for word in words:
+        if len(word) > max_word_length:
+            max_word_length = len(word)
     words = set(words)
     all_paths = []  # initalizing list we will return
     for y in range(4):
         for x in range(4):
-            _max_score_paths_core(board, words, "", [], (y,x), all_paths)
+            _max_score_paths_core(board, words, "", [], (y,x), all_paths, max_word_length)
     longest_paths = _find_longest_paths(all_paths)
     return longest_paths
 
 
-def _max_score_paths_core(board, words, word, used_locations, cur_location, all_paths):
+def _max_score_paths_core(board, words, word, used_locations, cur_location, all_paths, max_word_length):
     used_locations.append(cur_location)
     if not _are_locations_legal(used_locations):
         return
@@ -164,32 +165,40 @@ def _max_score_paths_core(board, words, word, used_locations, cur_location, all_
     y, x = cur_location[0], cur_location[1]
     word += board[y][x]
 
-    word_was_found = False
-    for tested_word in words:
-        if tested_word.startswith(word):
-            all_paths.append((word, used_locations))
-            word_was_found = True
-            break
-    if not word_was_found:
+    if len(word) > max_word_length:
         return
+
+    if word in words:
+        all_paths.append((word, used_locations))
+
+
+    # word_was_found = False
+   # for tested_word in words:
+   #     if tested_word.startswith(word):
+   #         all_paths.append((word, used_locations))
+   #         word_was_found = True
+    #        break
+    #if not word_was_found:
+   #     return
 
     for direction in consts.DIRECTIONS:
         new_location = (y + direction[0], x + direction[1])
         _max_score_paths_core(board, words, word[:], used_locations[:],
-                                  new_location, all_paths)
+                                  new_location, all_paths,max_word_length)
+
 
 
 def _find_longest_paths(all_paths):
     longest_paths = []
     used_words = []
-    current_longest = 0
+    current_longest = 0 #initialzing
     for path_tuple in all_paths:
         word, path = path_tuple[0], path_tuple[1]
         if len(path) > current_longest:
             used_words = [word]
             longest_paths = [path]
             current_longest = len(path)
-        if len(path) == current_longest:
+        elif len(path) == current_longest:
             if word not in used_words:
                 used_words.append(word)
                 longest_paths.append(path)
@@ -206,4 +215,9 @@ if __name__ == "__main__":
     #print(_are_locations_legal([(0, 0), (0, 1), (-1,1)]))  # FALSE
    # print(_are_locations_legal([(0, 0), (0, 2), (3,3)]))  # FALSE
     #print(_are_locations_legal([(0, 0), (0, 1), (1, 1),(2,2)]))  #TRUE
+    board = [["QU", "E", "W", "L"],
+            ["I", "E", "T", "R"],
+            ["E", "N", "Z", "D"],
+            ["A", "M", "L", "J"]]
+    words = ["QUEEN","SITE","WIELD","KIT"]
     print(max_score_paths(board,words))
