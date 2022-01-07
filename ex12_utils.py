@@ -92,21 +92,24 @@ def find_length_n_paths(n, board, words):
             __find_length_n_paths_core(x, y , "", n, board, words, [], paths)
     return paths
 
+
 def __find_length_n_paths_core(x, y, curr_word, n, board, words, used_locations, paths):
-    if len(curr_word) > 32 or len(used_locations) > 16:
+    if n > 16 or len(curr_word) > 32:
         return
-    if (y,x) in used_locations or len(used_locations) > n or x > 3 or x < 0 or y > 3 or y < 0:
-        return
-    
-    if len(used_locations) == n and curr_word in words:
-        if used_locations not in paths:
-            paths.append(used_locations)
+    if len(used_locations) >= n:
+        if curr_word in words:
+            if used_locations not in paths:
+                paths.append(used_locations)
         return
     
     for y_mod in [0, 1, -1]:
         for x_mod in [0, 1, -1]:
-            __find_length_n_paths_core(x + 1*x_mod , y + 1*y_mod, curr_word + board[y][x], n, board, words, used_locations + [(y,x)], paths)
-
+            if y_mod == 0 and x_mod == 0:
+                continue
+            new_y = y + y_mod
+            new_x = x + x_mod
+            if 0 <= new_x <= 3 and 0 <= new_y <= 3 and (new_y, new_x) not in used_locations: 
+                __find_length_n_paths_core(new_x , new_y, curr_word + board[new_y][new_x], n, board, words, used_locations + [(new_y, new_x)], paths)
 
 def find_length_n_words(n, board, words):
     words_with_n_length = []
