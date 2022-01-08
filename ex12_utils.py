@@ -142,7 +142,7 @@ def max_score_paths(board, words):
     for y in range(4):
         for x in range(4):
             __max_score_paths_core(board, words, "", [], (y,x), all_paths, max_word_length)
-    longest_paths = _find_longest_paths(all_paths)
+    longest_paths = _find_correct_paths(all_paths,words)
     return longest_paths
 
 
@@ -154,11 +154,14 @@ def __max_score_paths_core(board, words, word, used_locations, cur_location, all
     y, x = cur_location[0], cur_location[1]
     word += board[y][x]
 
-    if len(word) > max_word_length:
+    word_has_future = False
+    for tested_word in words:
+        if tested_word.startswith(word):
+            word_has_future = True
+            all_paths.append((word, used_locations))
+            break
+    if not word_has_future:
         return
-
-    if word in words:
-        all_paths.append((word, used_locations))
 
     for direction in consts.DIRECTIONS:
         new_location = (y + direction[0], x + direction[1])
@@ -167,21 +170,22 @@ def __max_score_paths_core(board, words, word, used_locations, cur_location, all
 
 
 
-def _find_longest_paths(all_paths):
-    longest_paths = []
-    used_words = []
-    current_longest = 0 #initialzing
+
+def _find_correct_paths(all_paths, words):
+    corect_paths = {}
     for path_tuple in all_paths:
         word, path = path_tuple[0], path_tuple[1]
-        if len(path) > current_longest:
-            used_words = [word]
-            longest_paths = [path]
-            current_longest = len(path)
-        elif len(path) == current_longest:
-            if word not in used_words:
-                used_words.append(word)
-                longest_paths.append(path)
-    return longest_paths
+        if word in words:
+            if word not in corect_paths:
+                corect_paths[word] = path
+            else:
+                if len(path) > len(corect_paths[word]):
+                    corect_paths[word] = path
+    #now we will extract the paths:
+    correct_paths_list = []
+    for word in corect_paths:
+        correct_paths_list.append(corect_paths[word])
+    return correct_paths_list
 
 
 if __name__ == "__main__":
