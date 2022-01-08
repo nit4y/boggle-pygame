@@ -160,16 +160,6 @@ def __max_score_paths_core(board, words, word, used_locations, cur_location, all
     if word in words:
         all_paths.append((word, used_locations))
 
-
-    # word_was_found = False
-   # for tested_word in words:
-   #     if tested_word.startswith(word):
-   #         all_paths.append((word, used_locations))
-   #         word_was_found = True
-    #        break
-    #if not word_was_found:
-   #     return
-
     for direction in consts.DIRECTIONS:
         new_location = (y + direction[0], x + direction[1])
         __max_score_paths_core(board, words, word[:], used_locations[:],

@@ -19,7 +19,7 @@ from gzip import decompress
 from base64 import b85decode
 import pickle
 import urllib.request
-
+import pytest
 
 class Ex12Tests(unittest.TestCase):
     def __init__(self, methodName: str = ...) -> None:
