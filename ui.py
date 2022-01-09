@@ -1,3 +1,5 @@
+# Web pages we used: https://stackoverflow.com/questions/3352918/how-to-center-a-window-on-the-screen-in-tkinter
+
 import tkinter as tk
 from tkinter import CENTER, TOP, BOTH, NW
 from tkinter.constants import LEFT, W
@@ -17,47 +19,58 @@ class UserInterface(object):
         root.iconbitmap('assets/icon.ico')
 
         # Initiate main menu frame
-        frame = tk.Frame(root)
-        self._main_menu_frame = frame
-        frame.grid(row=0, column=0, sticky="nsew")
         bg = tk.PhotoImage(file="assets/resized.png")
-        self._main_menu_canvas = tk.Canvas(frame, height=600, width=600, bd=0, highlightthickness=1)
-        self._main_menu_canvas.create_image(0, 0, image=bg, anchor=NW, tags="IMG")
-        self._main_menu_canvas.pack(side=TOP, fill=BOTH, expand=True)
-        self._create_buttons(self._main_menu_canvas, self._get_menu_buttons())
+        self._create_main_menu(bg)
 
         # Initiate play frame
         self.game_screen_display()
         self._about_rules_screen()
 
         self._show_main_menu_frame()
-        self.center(root)
+        self._center(root)
         root.mainloop()
 
 
     def run(self) -> None:
         self._main_window.mainloop()
     
+
     def exit(self) -> None :
         self._main_window.destroy()
+
 
     def _show_main_menu_frame(self):
         self._show_frame(self._main_menu_frame)
 
+
     def _show_game_frame(self):
         self._show_frame(self._game_display_frame)
     
+
     def _show_rules_frame(self):
         self._show_frame(self._about_rules_frame)
         
+
     def _create_buttons(self, parent, buttons):
         for _, b in buttons.items():
             button = tk.Button(parent, background = consts.PRIMARY, text = b["text"], font=(consts.MAIN_FONT, 18), command = b["command"])
             button.place(relx = b["relx"], rely = b["rely"], anchor = CENTER, width = b.get("width", 100), height = b.get("height", 50))
     
+
     def _show_frame(self, frame):
         frame.tkraise()
-        
+    
+
+    def _create_main_menu(self, image):
+        frame = tk.Frame(self._main_window)
+        self._main_menu_frame = frame
+        frame.grid(row=0, column=0, sticky="nsew")
+        self._main_menu_canvas = tk.Canvas(frame, height=600, width=600, bd=0, highlightthickness=1)
+        self._main_menu_canvas.create_image(0, 0, image=image, anchor=NW, tags="IMG")
+        self._main_menu_canvas.pack(side=TOP, fill=BOTH, expand=True)
+        self._create_buttons(self._main_menu_canvas, self._get_menu_buttons())
+
+
     def game_screen_display(self):
         root = self._main_window
         game_display_frame = tk.Frame(root, bg=consts.REGULAR_COLOR,
@@ -70,6 +83,7 @@ class UserInterface(object):
         self.four_by_four_maker(game_display_frame)
         game_display_frame.grid(row=0, column=0, sticky="nsew")
         self._game_display_frame = game_display_frame
+
 
     def side_display_maker(self, frame):
         root = self._main_window
@@ -86,6 +100,9 @@ class UserInterface(object):
         score_actual = tk.Label(frame_score, text = "9999", font = (consts.MAIN_FONT, 30))
         score_actual.pack()
         frame_score.pack()
+        button = tk.Button(frame, background = consts.SECONDARY, text = "Go Back", font=(consts.MAIN_FONT, 18), command = self._show_main_menu_frame)
+        button.pack()
+        
 
         ######################
         frame_time = tk.Frame(frame_for_side_bar, bg=consts.REGULAR_COLOR,
@@ -132,6 +149,7 @@ class UserInterface(object):
                 b.pack()
             frame_grid.pack(side = tk.LEFT)
 
+
     def _about_rules_screen(self):
         root = self._main_window
         frame = tk.Frame(root, height=300, width=450)
@@ -147,7 +165,7 @@ class UserInterface(object):
             l.pack(anchor=W, padx=30, pady=10)
 
 
-    def center(self, root):
+    def _center(self, root):
         """
         centers a tkinter window
         :param win: the main window or Toplevel window to center
@@ -163,6 +181,7 @@ class UserInterface(object):
         y = root.winfo_screenheight() // 2 - win_height // 2
         root.geometry('{}x{}+{}+{}'.format(width, height, x, y))
         root.deiconify()
+    
     
     def _get_menu_buttons(self):
         return {
