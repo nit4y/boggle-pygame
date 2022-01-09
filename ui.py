@@ -114,8 +114,8 @@ class UserInterface(object):
 
     def current_word_display(self,frame):
         root = self._main_window
-        frame_display = tk.Frame(frame,  bg="wheat",
-                               highlightbackground="wheat",
+        frame_display = tk.Frame(frame,  bg=consts.SECONDARY,
+                               highlightbackground=consts.SECONDARY,
                                highlightthickness=5)
         label = tk.Label(frame_display, text = "test", font = (consts.MAIN_FONT, 50))
         label.pack()
@@ -125,10 +125,10 @@ class UserInterface(object):
     def four_by_four_maker(self, frame) -> None:
         for i in range(4):
             frame_grid = tk.Frame(frame, bg="black",
-                               highlightbackground="wheat",
+                               highlightbackground=consts.SECONDARY,
                                highlightthickness=5)
             for j in range(4):
-                b = tk.Button(frame_grid, text= str(i)+","+str(j), bg = "orange",font=(consts.MAIN_FONT, 30))
+                b = tk.Button(frame_grid, text= str(i)+","+str(j), bg = consts.PRIMARY,font=(consts.MAIN_FONT, 30))
                 b.pack()
             frame_grid.pack(side = tk.LEFT)
 
@@ -144,25 +144,25 @@ class UserInterface(object):
         button.place(relx = 0.1, rely = 0.9, anchor = CENTER, width = 100, height = 50)
         frame.grid(row=0, column=0, sticky="nsew")
         for l in [l1, l2, l3, l4]:
-            l.pack(anchor=W, padx=30)
+            l.pack(anchor=W, padx=30, pady=10)
 
 
-    def center(self, win):
+    def center(self, root):
         """
         centers a tkinter window
         :param win: the main window or Toplevel window to center
         """
-        win.update_idletasks()
-        width = win.winfo_width()
-        frm_width = win.winfo_rootx() - win.winfo_x()
+        root.update_idletasks()
+        width = root.winfo_width()
+        frm_width = root.winfo_rootx() - root.winfo_x()
         win_width = width + 2 * frm_width
-        height = win.winfo_height()
-        titlebar_height = win.winfo_rooty() - win.winfo_y()
+        height = root.winfo_height()
+        titlebar_height = root.winfo_rooty() - root.winfo_y()
         win_height = height + titlebar_height + frm_width
-        x = win.winfo_screenwidth() // 2 - win_width // 2
-        y = win.winfo_screenheight() // 2 - win_height // 2
-        win.geometry('{}x{}+{}+{}'.format(width, height, x, y))
-        win.deiconify()
+        x = root.winfo_screenwidth() // 2 - win_width // 2
+        y = root.winfo_screenheight() // 2 - win_height // 2
+        root.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+        root.deiconify()
     
     def _get_menu_buttons(self):
         return {

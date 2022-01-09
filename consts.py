@@ -9,10 +9,10 @@ RULES = """
 
 Good luck!
 """
-ABOUT = "This project was made by Nitay Shoshana and Boaz Shimon as an assignment for Intro to CSE course, 2022"
+ABOUT = "This project was made by Nitay Shoshana and Boaz Shimon as an assignment for Intro to CS course, year 2022"
 
 # Color pallete
-PRIMARY = "orange"
-SECONDARY = "white"
+PRIMARY = "white"
+SECONDARY = "wheat"
 REGULAR_COLOR = 'lightgray'
 MAIN_FONT = "Courier New"
