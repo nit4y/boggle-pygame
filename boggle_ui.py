@@ -5,15 +5,18 @@ from tkinter import CENTER, TOP, BOTH, NW
 from tkinter.constants import LEFT, W
 from tkinter.font import BOLD
 import consts
-
+from boggle_game import BoggleGame
 
 def default():
     pass
 
-class UserInterface(object):
-    def __init__(self) -> None:
+class BoggleUserInterface(object):
+    def __init__(self, game: BoggleGame) -> None:
         # Initilization
+        self.game = game
+
         root = tk.Tk()
+        self.game.set_current_word(tk.StringVar())
         self._main_window = root
         root.title("Boggle")
         root.iconbitmap('assets/icon.ico')
@@ -100,7 +103,7 @@ class UserInterface(object):
         score_actual = tk.Label(frame_score, text = "9999", font = (consts.MAIN_FONT, 30))
         score_actual.pack()
         frame_score.pack()
-        button = tk.Button(frame, background = consts.SECONDARY, text = "Go Back", font=(consts.MAIN_FONT, 18), command = self._show_main_menu_frame)
+        button = tk.Button(frame, background = consts.SECONDARY, text = "Quit", font=(consts.MAIN_FONT, 18), command = self._show_main_menu_frame)
         button.pack()
         
 
@@ -134,18 +137,19 @@ class UserInterface(object):
         frame_display = tk.Frame(frame,  bg=consts.SECONDARY,
                                highlightbackground=consts.SECONDARY,
                                highlightthickness=5)
-        label = tk.Label(frame_display, text = "test", font = (consts.MAIN_FONT, 50))
+        label = tk.Label(frame_display, textvariable=self.game.current_word, font = (consts.MAIN_FONT, 50))
         label.pack()
         frame_display.pack(side = tk.TOP)
 
 
     def four_by_four_maker(self, frame) -> None:
+        board = self.game.board
         for i in range(4):
             frame_grid = tk.Frame(frame, bg="black",
                                highlightbackground=consts.SECONDARY,
                                highlightthickness=5)
             for j in range(4):
-                b = tk.Button(frame_grid, text= str(i)+","+str(j), bg = consts.PRIMARY,font=(consts.MAIN_FONT, 30))
+                b = tk.Button(frame_grid, text= board[i][j], bg = consts.PRIMARY,font=(consts.MAIN_FONT, 30), command= lambda letter = board[i][j]: self.game.player_choosing(letter))
                 b.pack()
             frame_grid.pack(side = tk.LEFT)
 
@@ -207,7 +211,3 @@ class UserInterface(object):
             },
             
         }
-
-if __name__ == "__main__":
-    ui = UserInterface()
-    #ui.run()
