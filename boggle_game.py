@@ -57,7 +57,8 @@ class BoggleGame():
             return
         self._used_locations.append(location)
         self.current_word.set(self.current_word.get() + letter)
-        if self.current_word.get() in self.word_set:
+        attempt = self.current_word.get()
+        if attempt not in self.discovered and attempt in self.word_set:
             self._add_discovery(self.current_word)
             self.score.set(self.score.get() + len(self.current_word.get())**2)
             self.current_word.set("")

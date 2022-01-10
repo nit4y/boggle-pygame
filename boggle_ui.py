@@ -130,7 +130,7 @@ class BoggleUserInterface(object):
         words_title = tk.Label(frame_found_words, text="WORDS:",
                                    font=(consts.MAIN_FONT, 30))
         words_title.grid(row=0, column=0)
-        words_actual = tk.Label(frame_found_words, textvariable = self.game.discovered_str, font=(consts.MAIN_FONT, 14))
+        words_actual = tk.Label(frame_found_words, textvariable = self.game.discovered_str, font=(consts.MAIN_FONT, 14), wraplength=70)
         words_actual.grid(row=1, column=0)
         frame_found_words.grid(row=2, column=0)
 
@@ -151,7 +151,7 @@ class BoggleUserInterface(object):
         frame_display = tk.Frame(frame,  bg=consts.SECONDARY,
                                highlightbackground=consts.SECONDARY,
                                highlightthickness=5)
-        label = tk.Label(frame_display, textvariable=self.game.current_word, font = (consts.MAIN_FONT, 50))
+        label = tk.Label(frame_display, textvariable=self.game.current_word, font = (consts.MAIN_FONT, 50), wraplength=600)
         label.grid(row=0, column=0, sticky='ew')
         button = tk.Button(frame_display, font = (consts.MAIN_FONT, 50), image=self.icons["backspace"], width = 40, height = 40, command=self.game.delete_last_letter)
         button.grid(row=0, column=1, sticky='w')
