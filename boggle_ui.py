@@ -51,7 +51,7 @@ class BoggleUserInterface(object):
         self._set_game_variables()
         self.game.start_timer()
         self.game.countdown()
-        self.game_screen_display()
+        self._game_screen_display()
         self._show_frame(self._game_display_frame)
     
 
@@ -86,16 +86,16 @@ class BoggleUserInterface(object):
         self._create_buttons(self._main_menu_canvas, self._get_menu_buttons())
 
 
-    def game_screen_display(self):
+    def _game_screen_display(self):
         root = self._main_window
         game_display_frame = tk.Frame(root, bg=consts.REGULAR_COLOR,
                                highlightbackground=consts.REGULAR_COLOR,
                                highlightthickness=5, width=600, height=600)
 
-        self.side_display_maker(game_display_frame)
-        self.current_word_display(game_display_frame)
+        self._side_display_maker(game_display_frame)
+        self._current_word_display(game_display_frame)
 
-        self.four_by_four_maker(game_display_frame)
+        self._four_by_four_maker(game_display_frame)
         game_display_frame.grid(row=0, column=0, columnspan=20, sticky="nsew")
         self._game_display_frame = game_display_frame
 
@@ -135,7 +135,7 @@ class BoggleUserInterface(object):
         frame_found_words.grid(row=2, column=0)
 
 
-    def side_display_maker(self, parent):
+    def _side_display_maker(self, parent):
         frame_for_side_bar = tk.Frame(parent, bg=consts.REGULAR_COLOR,
                                highlightbackground="black",
                                highlightthickness=5)
@@ -147,7 +147,7 @@ class BoggleUserInterface(object):
         frame_for_side_bar.grid(row=1, column=0, rowspan=4)
 
 
-    def current_word_display(self, frame):
+    def _current_word_display(self, frame):
         frame_display = tk.Frame(frame,  bg=consts.SECONDARY,
                                highlightbackground=consts.SECONDARY,
                                highlightthickness=5)
@@ -158,7 +158,7 @@ class BoggleUserInterface(object):
         frame_display.grid(row=0, column=0, columnspan=10, sticky='ew')
 
 
-    def four_by_four_maker(self, frame) -> None:
+    def _four_by_four_maker(self, frame) -> None:
         board = self.game.board
         frame_grid = tk.Frame(frame, bg="black",
                                highlightbackground=consts.SECONDARY,
