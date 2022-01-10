@@ -13,17 +13,20 @@ def default():
 class BoggleUserInterface(object):
     def __init__(self, game: BoggleGame) -> None:
         # Initilization
-        self.game = game
-
         root = tk.Tk()
+        self.game = game
         self.game.set_current_word(tk.StringVar())
+        self.game._tick_timer()
         self._main_window = root
         root.title("Boggle")
         root.iconbitmap('assets/icon.ico')
 
-        # Initiate main menu frame
-        bg = tk.PhotoImage(file="assets/resized.png")
-        self._create_main_menu(bg)
+        # Loading assets
+        self._load_assets()
+        
+
+        # Creating screens
+        self._create_main_menu(self.icons["menu-bg"])
 
         # Initiate play frame
         self.game_screen_display()
@@ -52,6 +55,13 @@ class BoggleUserInterface(object):
 
     def _show_rules_frame(self):
         self._show_frame(self._about_rules_frame)
+
+
+    def _load_assets(self):
+        self.icons = {
+            "backspace": tk.PhotoImage(file="assets/backspace_resized.png"),
+            "menu-bg": tk.PhotoImage(file="assets/resized.png")
+        }
         
 
     def _create_buttons(self, parent, buttons):
@@ -138,7 +148,9 @@ class BoggleUserInterface(object):
                                highlightbackground=consts.SECONDARY,
                                highlightthickness=5)
         label = tk.Label(frame_display, textvariable=self.game.current_word, font = (consts.MAIN_FONT, 50))
-        label.pack()
+        label.grid(row=0, column=0)
+        button = tk.Button(frame_display, font = (consts.MAIN_FONT, 50), image=self.icons["backspace"], width=40,height=40,relief=tk.FLAT, command=self.game.delete_last_letter)
+        button.grid(row=0, column=1)
         frame_display.pack(side = tk.TOP)
 
 

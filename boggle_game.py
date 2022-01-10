@@ -26,12 +26,15 @@ class BoggleGame():
         
     
     def delete_last_letter(self):
-        if len(self.current_word) > 0:
-            self.current_word = self.current_word[:-1]
+        if len(self.current_word.get()) > 0:
+            self.current_word.set(self.current_word.get()[:-1])
 
     
     def activate_end_message(self):
         pass
+
+    def _set_timer(self, timer):
+        self.timer = timer
 
 
     def _tick_timer(self):
