@@ -15,8 +15,10 @@ class BoggleUserInterface(object):
         # Initilization
         root = tk.Tk()
         self.game = game
+        self.game.set_root(root)
         self.game.set_current_word(tk.StringVar())
         self.game.set_discovered_str(tk.StringVar())
+        self.game.set_timer(tk.StringVar())
         self.game._tick_timer()
         self._main_window = root
         root.title("Boggle")
@@ -32,7 +34,6 @@ class BoggleUserInterface(object):
         # Initiate play frame
         self.game_screen_display()
         self._about_rules_screen()
-
         self._show_main_menu_frame()
         self._center(root)
         root.mainloop()
@@ -127,8 +128,11 @@ class BoggleUserInterface(object):
         time_title = tk.Label(frame_time, text="TIME:",
                                     font=(consts.MAIN_FONT, 30))
         time_title.grid(row=0,column=0)
-        time_actual = tk.Label(frame_time, text="9999",
-                                     font=(consts.MAIN_FONT, 30))
+        self.game.countdowntimer()
+        temp = tk.StringVar()
+       # temp.set(str(self.game.minute.get())+":"+str(self.game.second.get()))
+        time_actual = tk.Label(frame_time, textvariable = self.game.time_string ,font=(consts.MAIN_FONT, 30))
+
         time_actual.grid(row=1,column=0)
 
         frame_time.grid(row=1, column=0)
