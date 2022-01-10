@@ -11,8 +11,10 @@ Good luck!
 """
 ABOUT = "This project was made by Nitay Shoshana and Boaz Shimon as an assignment for Intro to CS course, year 2022"
 
+APP_NAME = "Boggle"
+
 # Color pallete
 PRIMARY = "white"
 SECONDARY = "wheat"
-REGULAR_COLOR = 'white'
+BLACK = 'black'
 MAIN_FONT = "Courier New"

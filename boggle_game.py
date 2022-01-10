@@ -25,10 +25,13 @@ class BoggleGame():
         if (self.timer == 0):
             minute = '00'
             second = '00'
+            self.time_string.set("{:02d}:{:02d}".format(int(minute), int(second)))
+            self.root.show_end_message()
+            return
         self.timer -= 1
         self.time_string.set("{:02d}:{:02d}".format(int(minute), int(second)))
         if self.continue_timer:
-            self.root.after(1000, self.countdown)
+            self.root._main_window.after(1000, self.countdown)
 
 
     def set_root(self, root):

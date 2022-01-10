@@ -1,7 +1,7 @@
 # Web pages we used: https://stackoverflow.com/questions/3352918/how-to-center-a-window-on-the-screen-in-tkinter
 
 import tkinter as tk
-from tkinter import CENTER, TOP, BOTH, NW
+from tkinter import messagebox, CENTER, TOP, BOTH, NW
 from tkinter.constants import LEFT, RIGHT, W
 from tkinter.font import BOLD
 import consts
@@ -12,26 +12,24 @@ class BoggleUserInterface(object):
 
         # Initilization
         root = tk.Tk()
+        root.attributes('-alpha', 0) # make it invisible until all ui builds
+        
         self.game = game
-        self.game.set_root(root)
+        self.game.set_root(self)
         self._set_game_variables()
         self._main_window = root
-        root.title("Boggle")
-        root.iconbitmap('assets/icon.ico')
-
+        root.title(consts.APP_NAME)
+        
         # Loading assets
         self._load_assets()
         
-
         # Creating screens
-        self._create_main_menu(self.icons["menu-bg"])
-
-        # Initiate play frame
-        
+        self._create_main_menu(self.icons["menu-bg"])        
         self._about_rules_screen()
         self._show_main_menu_frame()
         self._center(root)
         root.resizable(False, False) 
+        root.attributes('-alpha', 1.0)
 
 
     def run(self) -> None:
@@ -40,6 +38,16 @@ class BoggleUserInterface(object):
 
     def exit(self) -> None :
         self._main_window.destroy()
+
+
+    def show_end_message(self):
+        reply = messagebox.askyesno('Continue?', 'You scored: ' + str(self.game.score.get()) +  ". Good job!\nWant to play again?")
+        self.game.stop_timer()
+        if reply == True:
+            self._show_game_frame()
+        else:
+            self._show_main_menu_frame()
+
 
 
     def _show_main_menu_frame(self):
@@ -53,13 +61,9 @@ class BoggleUserInterface(object):
         self._set_game_variables()
         self.game.start_timer()
         self.game.countdown()
-        self._game_screen_display()
-      #  for i in range(11):
-      #      self._game_display_frame.grid_columnconfigure(i, weight=1)
-         #   self._game_display_frame.grid_rowconfigure(i, weight=1)
+        self._create_game_screen_display()
         self._game_display_frame.grid_columnconfigure(0, weight=2)
         self._game_display_frame.grid_columnconfigure(1, weight=1)
-       # self._game_display_frame.grid_columnconfigure(2, weight=1)
         self._game_display_frame.grid_rowconfigure(0, weight=2)
         self._game_display_frame.grid_rowconfigure(1, weight=1)
         self._show_frame(self._game_display_frame)
@@ -69,7 +73,12 @@ class BoggleUserInterface(object):
         self._show_frame(self._about_rules_frame)
 
 
+    def _show_frame(self, frame):
+        frame.tkraise()
+
+
     def _load_assets(self):
+        self._main_window.iconbitmap('assets/icon.ico')
         self.icons = {
             "backspace": tk.PhotoImage(file="assets/backspace_resized.png"),
             "menu-bg": tk.PhotoImage(file="assets/resized.png")
@@ -78,12 +87,8 @@ class BoggleUserInterface(object):
 
     def _create_buttons(self, parent, buttons):
         for _, b in buttons.items():
-            button = tk.Button(parent, background = consts.PRIMARY, text = b["text"], font=(consts.MAIN_FONT, 18), command = b["command"])
+            button = tk.Button(parent, background = consts.SECONDARY, text = b["text"], font=(consts.MAIN_FONT, 18), command = b["command"])
             button.place(relx = b["relx"], rely = b["rely"], anchor = CENTER, width = b.get("width", 100), height = b.get("height", 50))
-    
-
-    def _show_frame(self, frame):
-        frame.tkraise()
     
 
     def _create_main_menu(self, image):
@@ -96,13 +101,13 @@ class BoggleUserInterface(object):
         self._create_buttons(self._main_menu_canvas, self._get_menu_buttons())
 
 
-    def _game_screen_display(self):
+    def _create_game_screen_display(self):
         root = self._main_window
-        game_display_frame = tk.Frame(root, bg=consts.REGULAR_COLOR,
-                               highlightbackground=consts.REGULAR_COLOR,
+        game_display_frame = tk.Frame(root, bg=consts.PRIMARY,
+                               highlightbackground=consts.PRIMARY,
                                highlightthickness=5, width=600, height=600)
 
-        self._side_display_maker(game_display_frame)
+        self._create_side_display(game_display_frame)
         self._current_word_display(game_display_frame)
 
         self._four_by_four_maker(game_display_frame)
@@ -145,12 +150,10 @@ class BoggleUserInterface(object):
         frame_found_words.grid(row=2, column=0)
 
 
-    def _side_display_maker(self, parent):
+    def _create_side_display(self, parent):
         frame_for_side_bar = tk.Frame(parent, bg= consts.SECONDARY,
-                               highlightbackground="black",
+                               highlightbackground=consts.BLACK,
                                highlightthickness=2)
-      #  button = tk.Button(parent, background = consts.SECONDARY, text = "Quit", font=(consts.MAIN_FONT, 18), command = self._show_main_menu_frame)
-      #  button.grid(row=5,column=0)
         self._create_score_frame(parent = frame_for_side_bar)
         self._create_time_frame(parent = frame_for_side_bar)
         self._create_words_frame(parent = frame_for_side_bar)
@@ -158,7 +161,7 @@ class BoggleUserInterface(object):
 
     def _current_word_display(self, frame):
         frame_display = tk.Frame(frame,  bg=consts.SECONDARY,
-                               highlightbackground="black",
+                               highlightbackground=consts.BLACK,
                                highlightthickness=2)
         label = tk.Label(frame_display, bg=consts.SECONDARY, textvariable=self.game.current_word, font = (consts.MAIN_FONT, 43), wraplength=560,width=16)
         label.grid(row=0, column=0, sticky='w')
@@ -169,8 +172,8 @@ class BoggleUserInterface(object):
 
     def _four_by_four_maker(self, frame) -> None:
         board = self.game.board
-        frame_grid = tk.Frame(frame, bg="black",
-                               highlightbackground="black",
+        frame_grid = tk.Frame(frame, bg=consts.BLACK,
+                               highlightbackground=consts.BLACK,
                                highlightthickness=2, width = 400, height = 400)
         for i in range(4):
             for j in range(4):
@@ -181,13 +184,13 @@ class BoggleUserInterface(object):
 
     def _about_rules_screen(self):
         root = self._main_window
-        frame = tk.Frame(root, height=300, width=450)
+        frame = tk.Frame(root, bg=consts.SECONDARY, height=300, width=450)
         self._about_rules_frame = frame
-        l1 = tk.Label(frame, text = "Rules", font = (consts.MAIN_FONT, 18, BOLD), justify=LEFT)
-        l2 = tk.Label(frame, text = consts.RULES, font = (consts.MAIN_FONT, 14), wraplength=600, justify=LEFT)
-        l3 = tk.Label(frame, text = "About", font = (consts.MAIN_FONT, 18, BOLD), justify=LEFT)
-        l4 = tk.Label(frame, text = consts.ABOUT, font = (consts.MAIN_FONT, 14), wraplength=600, justify=LEFT)
-        button = tk.Button(frame, background = consts.SECONDARY, text = "Go Back", font=(consts.MAIN_FONT, 18), command = self._show_main_menu_frame)
+        l1 = tk.Label(frame, text = "Rules", bg=consts.SECONDARY, font = (consts.MAIN_FONT, 18, BOLD), justify=LEFT)
+        l2 = tk.Label(frame, text = consts.RULES, bg=consts.SECONDARY, font = (consts.MAIN_FONT, 14), wraplength=600, justify=LEFT)
+        l3 = tk.Label(frame, text = "About", bg=consts.SECONDARY,  font = (consts.MAIN_FONT, 18, BOLD), justify=LEFT)
+        l4 = tk.Label(frame, text = consts.ABOUT, bg=consts.SECONDARY, font = (consts.MAIN_FONT, 14), wraplength=600, justify=LEFT)
+        button = tk.Button(frame, background = "orange", text = "Back", font=(consts.MAIN_FONT, 18), command = self._show_main_menu_frame)
         button.place(relx = 0.1, rely = 0.9, anchor = CENTER, width = 100, height = 50)
         frame.grid(row=0, column=0, sticky="nsew")
         for l in [l1, l2, l3, l4]:
