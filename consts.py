@@ -14,5 +14,5 @@ ABOUT = "This project was made by Nitay Shoshana and Boaz Shimon as an assignmen
 # Color pallete
 PRIMARY = "white"
 SECONDARY = "wheat"
-REGULAR_COLOR = 'lightgray'
+REGULAR_COLOR = 'white'
 MAIN_FONT = "Courier New"

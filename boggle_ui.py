@@ -48,11 +48,20 @@ class BoggleUserInterface(object):
 
 
     def _show_game_frame(self):
+
         self.game.restart()
         self._set_game_variables()
         self.game.start_timer()
         self.game.countdown()
         self._game_screen_display()
+      #  for i in range(11):
+      #      self._game_display_frame.grid_columnconfigure(i, weight=1)
+         #   self._game_display_frame.grid_rowconfigure(i, weight=1)
+        self._game_display_frame.grid_columnconfigure(0, weight=2)
+        self._game_display_frame.grid_columnconfigure(1, weight=1)
+       # self._game_display_frame.grid_columnconfigure(2, weight=1)
+        self._game_display_frame.grid_rowconfigure(0, weight=2)
+        self._game_display_frame.grid_rowconfigure(1, weight=1)
         self._show_frame(self._game_display_frame)
     
 
@@ -103,72 +112,71 @@ class BoggleUserInterface(object):
 
 
     def _create_score_frame(self, parent):
-        frame_score = tk.Frame(parent, bg=consts.REGULAR_COLOR,
-                               highlightbackground=consts.REGULAR_COLOR,
+        frame_score = tk.Frame(parent, bg= consts.SECONDARY,
+                               highlightbackground=consts.SECONDARY,
                                highlightthickness=5)
-        score_title = tk.Label(frame_score, text = "SCORE:", font = (consts.MAIN_FONT, 30))
+        score_title = tk.Label(frame_score, text = "SCORE:", font = (consts.MAIN_FONT, 30, "underline",),bg= consts.SECONDARY)
         score_title.grid(row=0, column=0)
-        score_actual = tk.Label(frame_score, textvariable = self.game.score, font = (consts.MAIN_FONT, 30))
+        score_actual = tk.Label(frame_score, textvariable = self.game.score, font = (consts.MAIN_FONT, 30),bg= consts.SECONDARY)
         score_actual.grid(row=1, column=0)
         frame_score.grid(row=0,column=0)
 
 
     def _create_time_frame(self, parent): 
-        frame_time = tk.Frame(parent, bg=consts.REGULAR_COLOR,
-                            highlightbackground=consts.REGULAR_COLOR,
+        frame_time = tk.Frame(parent, bg= consts.SECONDARY,
+                            highlightbackground= consts.SECONDARY,
                             highlightthickness=5)
-        time_title = tk.Label(frame_time, text="TIME:", font=(consts.MAIN_FONT, 30))
+        time_title = tk.Label(frame_time, text="TIME:", font=(consts.MAIN_FONT, 30, "underline"),bg= consts.SECONDARY)
         time_title.grid(row=0,column=0)
-        time_actual = tk.Label(frame_time, textvariable = self.game.time_string ,font=(consts.MAIN_FONT, 30))
+        time_actual = tk.Label(frame_time, textvariable = self.game.time_string ,font=(consts.MAIN_FONT, 30),bg= consts.SECONDARY)
         time_actual.grid(row=1,column=0)
         frame_time.grid(row=1, column=0)
     
 
     def _create_words_frame(self, parent):
-        frame_found_words = tk.Frame(parent, bg=consts.REGULAR_COLOR,
-                           highlightbackground=consts.REGULAR_COLOR,
-                           highlightthickness=5)
+        frame_found_words = tk.Frame(parent, bg=consts.SECONDARY,
+                           highlightbackground= consts.SECONDARY,
+                           highlightthickness=2)
         words_title = tk.Label(frame_found_words, text="WORDS:",
-                                   font=(consts.MAIN_FONT, 30))
+                                   font=(consts.MAIN_FONT, 30, "underline"), bg = consts.SECONDARY)
         words_title.grid(row=0, column=0)
-        words_actual = tk.Label(frame_found_words, textvariable = self.game.discovered_str, font=(consts.MAIN_FONT, 12), wraplength=150)
+        words_actual = tk.Label(frame_found_words, bg= consts.SECONDARY, textvariable = self.game.discovered_str, font=(consts.MAIN_FONT, 12), wraplength=150)
         words_actual.grid(row=1, column=0)
         frame_found_words.grid(row=2, column=0)
 
 
     def _side_display_maker(self, parent):
-        frame_for_side_bar = tk.Frame(parent, bg=consts.REGULAR_COLOR,
+        frame_for_side_bar = tk.Frame(parent, bg= consts.SECONDARY,
                                highlightbackground="black",
-                               highlightthickness=5)
-        button = tk.Button(parent, background = consts.SECONDARY, text = "Quit", font=(consts.MAIN_FONT, 18), command = self._show_main_menu_frame)
-        button.grid(row=5,column=0)
+                               highlightthickness=2)
+      #  button = tk.Button(parent, background = consts.SECONDARY, text = "Quit", font=(consts.MAIN_FONT, 18), command = self._show_main_menu_frame)
+      #  button.grid(row=5,column=0)
         self._create_score_frame(parent = frame_for_side_bar)
         self._create_time_frame(parent = frame_for_side_bar)
         self._create_words_frame(parent = frame_for_side_bar)
-        frame_for_side_bar.grid(row=1, column=0, rowspan=4)
-
+        frame_for_side_bar.grid(row=1, column=0, rowspan=4, sticky = "nsew")
 
     def _current_word_display(self, frame):
         frame_display = tk.Frame(frame,  bg=consts.SECONDARY,
-                               highlightbackground=consts.SECONDARY,
-                               highlightthickness=5)
-        label = tk.Label(frame_display, textvariable=self.game.current_word, font = (consts.MAIN_FONT, 50), wraplength=560)
-        label.grid(row=0, column=0, sticky='ew')
-        button = tk.Button(frame_display, font = (consts.MAIN_FONT, 50), image=self.icons["backspace"], width = 40, height = 40, command=self.game.delete_last_letter)
-        button.grid(row=0, column=1, sticky='w')
+                               highlightbackground="black",
+                               highlightthickness=2)
+        label = tk.Label(frame_display, bg=consts.SECONDARY, textvariable=self.game.current_word, font = (consts.MAIN_FONT, 43), wraplength=560,width=16)
+        label.grid(row=0, column=0, sticky='w')
+        button = tk.Button(frame_display, font = (consts.MAIN_FONT, 50), image=self.icons["backspace"], width = 60, height = 60, command=self.game.delete_last_letter)
+        button.grid(row=0, column=3, sticky='e')
         frame_display.grid(row=0, column=0, columnspan=10, sticky='ew')
 
 
     def _four_by_four_maker(self, frame) -> None:
         board = self.game.board
         frame_grid = tk.Frame(frame, bg="black",
-                               highlightbackground=consts.SECONDARY,
-                               highlightthickness=5)
+                               highlightbackground="black",
+                               highlightthickness=2, width = 400, height = 400)
         for i in range(4):
             for j in range(4):
-                b = tk.Button(frame_grid, text= board[i][j], bg = consts.PRIMARY,font=(consts.MAIN_FONT, 30), command= lambda letter = board[i][j], loc = (i,j): self.game.player_choosing(letter, loc))
+                b = tk.Button(frame_grid, text= board[i][j], bg = "orange",font=(consts.MAIN_FONT, 30), command= lambda letter = board[i][j], loc = (i,j): self.game.player_choosing(letter, loc), height = 2,width = 4)
                 b.grid(row=i, column=j)
-        frame_grid.grid(row=2, column=1)
+        frame_grid.grid(row=1, column=1,rowspan=4, sticky="e")
 
 
     def _about_rules_screen(self):
