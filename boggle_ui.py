@@ -31,6 +31,7 @@ class BoggleUserInterface(object):
         self._about_rules_screen()
         self._show_main_menu_frame()
         self._center(root)
+        root.resizable(False, False) 
 
 
     def run(self) -> None:

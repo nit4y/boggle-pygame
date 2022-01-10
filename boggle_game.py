@@ -72,9 +72,9 @@ class BoggleGame():
 
     def delete_last_letter(self):
         try:
-            self._used_locations.pop()
+            x, y = self._used_locations.pop()
             if len(self.current_word.get()) > 0:
-                self.current_word.set(self.current_word.get()[:-1])
+                self.current_word.set(self.current_word.get()[:-len(self.board[x][y])])
         except IndexError as e:
             print(e)
             pass
