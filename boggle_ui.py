@@ -14,9 +14,7 @@ class BoggleUserInterface(object):
         root = tk.Tk()
         self.game = game
         self.game.set_root(root)
-        self.game.set_current_word(tk.StringVar())
-        self.game.set_discovered_str(tk.StringVar())
-        self.game.set_timer(tk.StringVar())
+        self._set_game_variables()
         self._main_window = root
         root.title("Boggle")
         root.iconbitmap('assets/icon.ico')
@@ -29,7 +27,7 @@ class BoggleUserInterface(object):
         self._create_main_menu(self.icons["menu-bg"])
 
         # Initiate play frame
-        self.game_screen_display()
+        
         self._about_rules_screen()
         self._show_main_menu_frame()
         self._center(root)
@@ -44,12 +42,16 @@ class BoggleUserInterface(object):
 
 
     def _show_main_menu_frame(self):
+        self.game.stop_timer()
         self._show_frame(self._main_menu_frame)
 
 
     def _show_game_frame(self):
+        self.game.restart()
+        self._set_game_variables()
         self.game.start_timer()
         self.game.countdown()
+        self.game_screen_display()
         self._show_frame(self._game_display_frame)
     
 
@@ -105,7 +107,7 @@ class BoggleUserInterface(object):
                                highlightthickness=5)
         score_title = tk.Label(frame_score, text = "SCORE:", font = (consts.MAIN_FONT, 30))
         score_title.grid(row=0, column=0)
-        score_actual = tk.Label(frame_score, text = "9999", font = (consts.MAIN_FONT, 30))
+        score_actual = tk.Label(frame_score, textvariable = self.game.score, font = (consts.MAIN_FONT, 30))
         score_actual.grid(row=1, column=0)
         frame_score.grid(row=0,column=0)
 
@@ -197,6 +199,12 @@ class BoggleUserInterface(object):
         root.geometry('{}x{}+{}+{}'.format(width, height, x, y))
         root.deiconify()
     
+
+    def _set_game_variables(self):
+        self.game.set_current_word(tk.StringVar())
+        self.game.set_discovered_str(tk.StringVar())
+        self.game.set_timer(tk.StringVar())
+        self.game.set_score(tk.IntVar())
     
     def _get_menu_buttons(self):
         return {

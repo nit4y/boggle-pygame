@@ -4,7 +4,7 @@ from ex12_utils import is_near_previous
 
 class BoggleGame():
     def __init__(self) -> None:
-        self.score = 0
+        self.score = None
         self.timer = int(3)*60
         self.board = randomize_board()
         self.discovered = set()
@@ -59,7 +59,7 @@ class BoggleGame():
         self.current_word.set(self.current_word.get() + letter)
         if self.current_word.get() in self.word_set:
             self._add_discovery(self.current_word)
-            self.score+=len(self.current_word.get())**2
+            self.score.set(len(self.current_word.get())**2)
             self.current_word.set("")
 
 
@@ -85,5 +85,14 @@ class BoggleGame():
     def set_discovered_str(self, discovered):
         self.discovered_str = discovered
     
+    def set_score(self, score):
+        self.score = score
+    
+    def restart(self):
+        self.__init__()
+
     def start_timer(self):
         self.continue_timer = True
+    
+    def stop_timer(self):
+        self.continue_timer = False
