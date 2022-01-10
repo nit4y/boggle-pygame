@@ -61,6 +61,7 @@ class BoggleGame():
             self._add_discovery(self.current_word)
             self.score.set(len(self.current_word.get())**2)
             self.current_word.set("")
+            self._used_locations = []
 
 
     def _add_discovery(self, word):
@@ -85,14 +86,19 @@ class BoggleGame():
     def set_discovered_str(self, discovered):
         self.discovered_str = discovered
     
+
     def set_score(self, score):
         self.score = score
     
+
     def restart(self):
         self.__init__()
 
+
     def start_timer(self):
         self.continue_timer = True
-    
+
+
     def stop_timer(self):
         self.continue_timer = False
+

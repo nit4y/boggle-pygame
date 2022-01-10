@@ -134,6 +134,7 @@ class BoggleUserInterface(object):
         words_actual.grid(row=1, column=0)
         frame_found_words.grid(row=2, column=0)
 
+
     def side_display_maker(self, parent):
         frame_for_side_bar = tk.Frame(parent, bg=consts.REGULAR_COLOR,
                                highlightbackground="black",
@@ -145,6 +146,7 @@ class BoggleUserInterface(object):
         self._create_words_frame(parent = frame_for_side_bar)
         frame_for_side_bar.grid(row=1, column=0, rowspan=4)
 
+
     def current_word_display(self, frame):
         frame_display = tk.Frame(frame,  bg=consts.SECONDARY,
                                highlightbackground=consts.SECONDARY,
@@ -154,6 +156,7 @@ class BoggleUserInterface(object):
         button = tk.Button(frame_display, font = (consts.MAIN_FONT, 50), image=self.icons["backspace"], width = 40, height = 40, command=self.game.delete_last_letter)
         button.grid(row=0, column=1, sticky='w')
         frame_display.grid(row=0, column=0, columnspan=10, sticky='ew')
+
 
     def four_by_four_maker(self, frame) -> None:
         board = self.game.board
@@ -206,6 +209,7 @@ class BoggleUserInterface(object):
         self.game.set_timer(tk.StringVar())
         self.game.set_score(tk.IntVar())
     
+
     def _get_menu_buttons(self):
         return {
             1: {
