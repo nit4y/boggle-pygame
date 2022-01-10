@@ -59,7 +59,7 @@ class BoggleGame():
         self.current_word.set(self.current_word.get() + letter)
         if self.current_word.get() in self.word_set:
             self._add_discovery(self.current_word)
-            self.score.set(self.score + len(self.current_word.get())**2)
+            self.score.set(self.score.get() + len(self.current_word.get())**2)
             self.current_word.set("")
             self._used_locations = []
 
