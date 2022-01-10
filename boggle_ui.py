@@ -2,7 +2,7 @@
 
 import tkinter as tk
 from tkinter import CENTER, TOP, BOTH, NW
-from tkinter.constants import LEFT, W
+from tkinter.constants import LEFT, RIGHT, W
 from tkinter.font import BOLD
 import consts
 from boggle_game import BoggleGame
@@ -16,6 +16,7 @@ class BoggleUserInterface(object):
         root = tk.Tk()
         self.game = game
         self.game.set_current_word(tk.StringVar())
+        self.game.set_discovered_str(tk.StringVar())
         self.game._tick_timer()
         self._main_window = root
         root.title("Boggle")
@@ -80,7 +81,7 @@ class BoggleUserInterface(object):
         frame.grid(row=0, column=0, sticky="nsew")
         self._main_menu_canvas = tk.Canvas(frame, height=600, width=600, bd=0, highlightthickness=1)
         self._main_menu_canvas.create_image(0, 0, image=image, anchor=NW, tags="IMG")
-        self._main_menu_canvas.pack(side=TOP, fill=BOTH, expand=True)
+        self._main_menu_canvas.pack(side=TOP, fill=BOTH, expand=False)
         self._create_buttons(self._main_menu_canvas, self._get_menu_buttons())
 
 
@@ -94,7 +95,7 @@ class BoggleUserInterface(object):
         self.current_word_display(game_display_frame)
 
         self.four_by_four_maker(game_display_frame)
-        game_display_frame.grid(row=0, column=0, sticky="nsew")
+        game_display_frame.grid(row=0, column=0, columnspan=20, sticky="nsew")
         self._game_display_frame = game_display_frame
 
 
@@ -108,13 +109,15 @@ class BoggleUserInterface(object):
                                highlightthickness=5)
 
         score_title = tk.Label(frame_score, text = "SCORE:", font = (consts.MAIN_FONT, 30))
-        score_title.pack()
+        score_title.grid(row=0, column=0)
 
         score_actual = tk.Label(frame_score, text = "9999", font = (consts.MAIN_FONT, 30))
-        score_actual.pack()
-        frame_score.pack()
+        score_actual.grid(row=1, column=0)
+
+        frame_score.grid(row=0,column=0)
+
         button = tk.Button(frame, background = consts.SECONDARY, text = "Quit", font=(consts.MAIN_FONT, 18), command = self._show_main_menu_frame)
-        button.pack()
+        button.grid(row=5,column=0)
         
 
         ######################
@@ -123,47 +126,55 @@ class BoggleUserInterface(object):
                             highlightthickness=5)
         time_title = tk.Label(frame_time, text="TIME:",
                                     font=(consts.MAIN_FONT, 30))
-        time_title.pack()
+        time_title.grid(row=0,column=0)
         time_actual = tk.Label(frame_time, text="9999",
                                      font=(consts.MAIN_FONT, 30))
-        time_actual.pack()
-        frame_time.pack()
+        time_actual.grid(row=1,column=0)
+
+        frame_time.grid(row=1, column=0)
+        
         #####################
+
         frame_found_words = tk.Frame(frame_for_side_bar, bg=consts.REGULAR_COLOR,
                            highlightbackground=consts.REGULAR_COLOR,
                            highlightthickness=5)
         words_title = tk.Label(frame_found_words, text="WORDS:",
                                    font=(consts.MAIN_FONT, 30))
-        words_title.pack()
-        words_actual = tk.Label(frame_found_words, text="test",
+        words_title.grid(row=0, column=0)
+        words_actual = tk.Label(frame_found_words, textvariable=self.game.discovered_str,
                                     font=(consts.MAIN_FONT, 30))
-        words_actual.pack()
-        frame_found_words.pack()
-        frame_for_side_bar.pack(side = tk.LEFT)
+        words_actual.grid(row=1, column=0)
+        frame_found_words.grid(row=2, column=0)
+        
+        
+        frame_for_side_bar.grid(row=1, column=0, rowspan=4)
 
 
-    def current_word_display(self,frame):
-        root = self._main_window
+    def current_word_display(self, frame):
         frame_display = tk.Frame(frame,  bg=consts.SECONDARY,
                                highlightbackground=consts.SECONDARY,
                                highlightthickness=5)
+        
         label = tk.Label(frame_display, textvariable=self.game.current_word, font = (consts.MAIN_FONT, 50))
-        label.grid(row=0, column=0)
-        button = tk.Button(frame_display, font = (consts.MAIN_FONT, 50), image=self.icons["backspace"], width=40,height=40,relief=tk.FLAT, command=self.game.delete_last_letter)
-        button.grid(row=0, column=1)
-        frame_display.pack(side = tk.TOP)
+        label.grid(row=0, column=0, sticky='ew')
+        
+        button = tk.Button(frame_display, font = (consts.MAIN_FONT, 50), image=self.icons["backspace"], width = 40, height = 40, command=self.game.delete_last_letter)
+        button.grid(row=0, column=1, sticky='e')
+
+        frame_display.grid(row=0, column=0, columnspan=10, sticky='ew')
 
 
     def four_by_four_maker(self, frame) -> None:
         board = self.game.board
-        for i in range(4):
-            frame_grid = tk.Frame(frame, bg="black",
+        frame_grid = tk.Frame(frame, bg="black",
                                highlightbackground=consts.SECONDARY,
                                highlightthickness=5)
+        for i in range(4):
+            
             for j in range(4):
                 b = tk.Button(frame_grid, text= board[i][j], bg = consts.PRIMARY,font=(consts.MAIN_FONT, 30), command= lambda letter = board[i][j]: self.game.player_choosing(letter))
-                b.pack()
-            frame_grid.pack(side = tk.LEFT)
+                b.grid(row=i, column=j)
+        frame_grid.grid(row=2, column=1)
 
 
     def _about_rules_screen(self):
