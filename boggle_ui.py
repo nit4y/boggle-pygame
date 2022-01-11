@@ -77,7 +77,7 @@ class BoggleUserInterface(object):
         """
         self.game.stop_timer()
         root = tk.Tk()
-        
+        root.title("End")
         frame = tk.Frame(root, width=300, height = 250)
         l1 = tk.Label(frame, font=(consts.MAIN_FONT, 16, BOLD), text="SCORE: " + str(self.game.score.get()), wraplength=270)
         l2 = tk.Label(frame, font=(consts.MAIN_FONT, 16), text="\nPlay again?\n", wraplength=270)
