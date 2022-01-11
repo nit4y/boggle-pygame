@@ -7,3 +7,5 @@ with each move the user makes the game will mark the next possible movments on t
 the main menu screen has calming music, while the game screen has more intense music
 
 3. Timer changes color to red when under 30 seconds
+
+4. Added "Rules and About" screen - containing the basic rules for Boggle, and a short explanation about the project.
