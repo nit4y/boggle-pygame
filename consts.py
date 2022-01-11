@@ -1,5 +1,6 @@
 
 DIRECTIONS = [(1,0), (0,1), (-1,0), (0,-1), (1,1), (-1,1), (1,-1), (-1,-1)]
+DICT_FILE_PATH = "boggle_dict.txt"
 RULES = """
 1. Your goal is to find as many words as you can.
 2. Use the mouse to click on squares containing letters to make words
@@ -13,8 +14,11 @@ ABOUT = "This project was made by Nitay Shoshana and Boaz Shimon as an assignmen
 
 APP_NAME = "Boggle"
 
+MUSIC_VOLUME = 0.5
+
 # Color pallete
 PRIMARY = "white"
 SECONDARY = "wheat"
+ORANGE = "orange"
 BLACK = 'black'
 MAIN_FONT = "Courier New"

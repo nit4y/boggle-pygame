@@ -1,1 +1,9 @@
-<Describe your project's features here>
+Our project features all the must have features described in ex12.pdf AND:
+
+1. Square marking for next possible move -
+with each move the user makes the game will mark the next possible movments on the board
+
+2. Music - music was added to make the game more exiting and fun
+the main menu screen has calming music, while the game screen has more intense music
+
+3. Timer changes color to red when under 30 seconds
