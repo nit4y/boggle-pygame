@@ -198,7 +198,13 @@ def __max_score_paths_core(board: List[List[Tuple[int,int]]], words: Set[str], w
         if 0 <= new_x <= 3 and 0 <= new_y <= 3 and (new_y, new_x) not in used_locations: 
             __max_score_paths_core(board, words, word, used_locations[:], new_location, all_paths, max_word_length)
 
-def _find_correct_paths(all_paths, words: Set[str]) -> List[List[Tuple[int,int]]]:
+def _find_correct_paths(all_paths: List[Tuple[str, List[Tuple[int, int]]]], words: Set[str]) -> List[List[Tuple[int,int]]]:
+    """
+    filters all the paths to ensure that the longest path for each word is returned
+    :param all_paths: all the paths matching the creteria, that was found by __max_score_paths_core
+    :param words: the set of the words to search from
+    :return: the list of the paths that results in a perfect boggle game, with maximum score.
+    """
     corect_paths = {}
     for path_tuple in all_paths:
         word, path = path_tuple[0], path_tuple[1]
