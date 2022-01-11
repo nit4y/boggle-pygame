@@ -160,22 +160,26 @@ def max_score_paths(board: List[List[Tuple[int,int]]], words: List[str]) -> List
     """
     max_word_length = 0 #initlazing
     words = set(words)
+    words_eight = set()
     for word in words:
+        if len(word) >= 8:
+            words_eight.add(word[:8])
         if len(word) > max_word_length:
             max_word_length = len(word)
     all_paths = []  # initalizing list we will return
     for y in range(4):
         for x in range(4):
-            __max_score_paths_core(board, words, "", [], (y,x), all_paths, max_word_length)
+            __max_score_paths_core(board, words, words_eight, "", [], (y,x), all_paths, max_word_length)
     longest_paths = _find_correct_paths(all_paths,words)
     return longest_paths
 
-def __max_score_paths_core(board: List[List[Tuple[int,int]]], words: Set[str], word: str, used_locations: List[Tuple[int,int]], cur_location: Tuple[int,int], all_paths:  List[List[Tuple[int,int]]], max_word_length: int) -> None:
+def __max_score_paths_core(board: List[List[Tuple[int,int]]], words: Set[str], words_eight: Set[str], word: str, used_locations: List[Tuple[int,int]], cur_location: Tuple[int,int], all_paths:  List[List[Tuple[int,int]]], max_word_length: int) -> None:
     """
     core method to max_score_paths, a recursive method works with backtracing to find all possible paths matches creteria 
     :param word: the current word the path is building
     :param board: a 2 dimensional board which represnets the Boggle board
     :param words: the avilable words to look. only matches paths which represents words in the words set will be returned
+    :param words: words filtered to only the words with length longer or equal to 8, only until the 8th character
     :param all_paths: the return list
     :param used_locations: all the locations already present in the path
     :param cur_location: the current location processing
@@ -189,6 +193,10 @@ def __max_score_paths_core(board: List[List[Tuple[int,int]]], words: Set[str], w
     if word in words:
         all_paths.append((word, used_locations))
     
+    if len(word) >= 8: # backtracking over len > 8 is too slow, so we check this condition to ensure its worthy
+        if word[:8] not in words_eight:
+            return
+            
     if len(word) + 1 > max_word_length:
         return
 
@@ -196,7 +204,7 @@ def __max_score_paths_core(board: List[List[Tuple[int,int]]], words: Set[str], w
         new_y, new_x = y + y_mod, x + x_mod
         new_location = (new_y, new_x)
         if 0 <= new_x <= 3 and 0 <= new_y <= 3 and (new_y, new_x) not in used_locations: 
-            __max_score_paths_core(board, words, word, used_locations[:], new_location, all_paths, max_word_length)
+            __max_score_paths_core(board, words, words_eight, word, used_locations[:], new_location, all_paths, max_word_length)
 
 def _find_correct_paths(all_paths: List[Tuple[str, List[Tuple[int, int]]]], words: Set[str]) -> List[List[Tuple[int,int]]]:
     """
