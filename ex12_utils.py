@@ -179,10 +179,10 @@ def max_score_paths(board: List[List[Tuple[int,int]]], words: List[str]) -> List
     """
     words = __filter_words_for_max_score(board, words)
     max_word_length = 0 #initlazing
+    words = set(words)
     for word in words:
         if len(word) > max_word_length:
             max_word_length = len(word)
-    words = set(words)
     all_paths = []  # initalizing list we will return
     for y in range(4):
         for x in range(4):
@@ -201,26 +201,22 @@ def __max_score_paths_core(board: List[List[Tuple[int,int]]], words: Set[str], w
     :param cur_location: the current location processing
     :return: a list of paths matches the creteria
     """
-    used_locations.append(cur_location)
-    if not __are_locations_legal(used_locations):
-        return
-
     y, x = cur_location[0], cur_location[1]
     word += board[y][x]
 
-    word_has_future = False
-    for tested_word in words:
-        if tested_word.startswith(word):
-            word_has_future = True
-            all_paths.append((word, used_locations))
-            break
-    if not word_has_future:
+    if len(word) > max_word_length:
         return
+    
+    used_locations.append(cur_location)
+    
+    if word in words:
+        all_paths.append((word, used_locations))
 
-    for direction in consts.DIRECTIONS:
-        new_location = (y + direction[0], x + direction[1])
-        __max_score_paths_core(board, words, word[:], used_locations[:],
-                                  new_location, all_paths,max_word_length)
+    for y_mod, x_mod in consts.DIRECTIONS:
+        new_y, new_x = y + y_mod, x + x_mod
+        new_location = (new_y, new_x)
+        if 0 <= new_x <= 3 and 0 <= new_y <= 3 and (new_y, new_x) not in used_locations: 
+            __max_score_paths_core(board, words, word, used_locations[:], new_location, all_paths, max_word_length)
 
 def _find_correct_paths(all_paths, words: Set[str]) -> List[List[Tuple[int,int]]]:
     corect_paths = {}
