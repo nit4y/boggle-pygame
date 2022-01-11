@@ -99,13 +99,16 @@ class BoggleGame():
         if not self._is_choose_legal(location):
             return
         self._used_locations.append(location)
-        self.current_word.set(self.current_word.get() + letter)
+        if self.current_word.get() == consts.SUCCESS_MESSAGE:
+            self.current_word.set(letter)
+        else:
+            self.current_word.set(self.current_word.get() + letter)
         self.root.mark_next_move_squares(location)
         attempt = self.current_word.get()
         if attempt not in self.discovered and attempt in self.word_set:
             self._add_discovery(self.current_word)
             self.score.set(self.score.get() + len(self.current_word.get())**2)
-            self.current_word.set("")
+            self.current_word.set(consts.SUCCESS_MESSAGE)
             self._used_locations = []
             self.root.clean_markings_from_board()
 

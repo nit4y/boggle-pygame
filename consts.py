@@ -10,6 +10,9 @@ RULES = """
 
 Good luck!
 """
+
+SUCCESS_MESSAGE = "Nice! :)"
+
 ABOUT = "This project was made by Nitay Shoshana and Boaz Shimon as an assignment for Intro to CS course, year 2022"
 
 APP_NAME = "Boggle"
