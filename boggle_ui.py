@@ -75,13 +75,17 @@ class BoggleUserInterface(object):
         shows the ending message pop up for the game
         :return: None
         """
-        reply = messagebox.askyesno('Continue?', 'You scored: ' + str(self.game.score.get()) +  ". Good job!\nWant to play again?")
         self.game.stop_timer()
-        if reply == True:
-            self._show_game_frame()
-        else:
-            self._show_main_menu_frame()
-
+        root = tk.Tk()
+        self._center(root)
+        frame = tk.Frame(root, width=300, height = 250)
+        l1 = tk.Label(frame, text="SCORE: " + str(self.game.score.get()) + "\nWant to play another game?\n", wraplength=150)
+        yb = tk.Button(frame, text = "Yes", font=(consts.MAIN_FONT, 14), command=lambda r = root: self._show_game_frame_and_destroy(r))
+        nb = tk.Button(frame, text = "No", font=(consts.MAIN_FONT, 14), command=lambda r = root: self._show_main_menu_frame_and_destroy(r))
+        l1.place(relx=0.1, rely=0.1)
+        yb.place(relx=0.2, rely=0.6)
+        nb.place(relx=0.6, rely=0.6)
+        frame.pack(expand=True)
 
 
     def _show_main_menu_frame(self, play: bool = True) -> None:
@@ -399,3 +403,18 @@ class BoggleUserInterface(object):
             },
             
         }
+    
+    def _show_game_frame_and_destroy(self, root: tk.Tk) -> None:
+        """
+        shows game frame and destroys root
+        """
+        self._show_game_frame()
+        root.destroy()
+    
+
+    def _show_main_menu_frame_and_destroy(self, root: tk.Tk) -> None:
+        """
+        shows game frame and destroys root
+        """
+        self._show_main_menu_frame()
+        root.destroy()

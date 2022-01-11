@@ -15,7 +15,7 @@ class BoggleGame():
         :return: None
         """
         self.score = None
-        self.timer = int(3)*60
+        self.timer = int(1)*60
         self.board = randomize_board()
         self.discovered = set()
         self.discovered_str = None
