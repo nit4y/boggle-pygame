@@ -24,4 +24,6 @@ PRIMARY = "white"
 SECONDARY = "wheat"
 ORANGE = "orange"
 BLACK = 'black'
+PLAYER_CHOOSING_COLOR = "#ff9980"
+NEXT_MOVE_COLOR = "#d9ffb3"
 MAIN_FONT = "Courier New"

@@ -77,15 +77,18 @@ class BoggleUserInterface(object):
         """
         self.game.stop_timer()
         root = tk.Tk()
-        self._center(root)
+        
         frame = tk.Frame(root, width=300, height = 250)
-        l1 = tk.Label(frame, text="SCORE: " + str(self.game.score.get()) + "\nWant to play another game?\n", wraplength=150)
-        yb = tk.Button(frame, text = "Yes", font=(consts.MAIN_FONT, 14), command=lambda r = root: self._show_game_frame_and_destroy(r))
-        nb = tk.Button(frame, text = "No", font=(consts.MAIN_FONT, 14), command=lambda r = root: self._show_main_menu_frame_and_destroy(r))
-        l1.place(relx=0.1, rely=0.1)
+        l1 = tk.Label(frame, font=(consts.MAIN_FONT, 16, BOLD), text="SCORE: " + str(self.game.score.get()), wraplength=270)
+        l2 = tk.Label(frame, font=(consts.MAIN_FONT, 16), text="\nPlay again?\n", wraplength=270)
+        yb = tk.Button(frame, text = "Yes", bg=consts.BLACK, fg=consts.PRIMARY,  font=(consts.MAIN_FONT, 14), command=lambda r = root: self._show_game_frame_and_destroy(r))
+        nb = tk.Button(frame, text = "No", bg=consts.BLACK, fg=consts.PRIMARY, font=(consts.MAIN_FONT, 14), command=lambda r = root: self._show_main_menu_frame_and_destroy(r))
+        l1.place(relx=0.3, rely=0.1)
+        l2.place(relx=0.2, rely=0.2)
         yb.place(relx=0.2, rely=0.6)
         nb.place(relx=0.6, rely=0.6)
         frame.pack(expand=True)
+        self._center(root)
 
 
     def _show_main_menu_frame(self, play: bool = True) -> None:
@@ -154,7 +157,7 @@ class BoggleUserInterface(object):
         :return: None
         """
         for _, b in buttons.items():
-            button = tk.Button(parent, background = consts.SECONDARY, text = b["text"], font=(consts.MAIN_FONT, 18), command = b["command"])
+            button = tk.Button(parent, background = consts.BLACK, fg=consts.PRIMARY, text = b["text"], font=(consts.MAIN_FONT, 18), command = b["command"])
             button.place(relx = b["relx"], rely = b["rely"], anchor = CENTER, width = b.get("width", 150), height = b.get("height", 50))
     
 
@@ -255,7 +258,7 @@ class BoggleUserInterface(object):
         self._create_time_frame(parent = frame_for_side_bar)
         self._create_words_frame(parent = frame_for_side_bar)
 
-        b = tk.Button(parent, text="Quit", bg= "black", fg="white", font=(consts.MAIN_FONT, 14), command=self._show_main_menu_frame)
+        b = tk.Button(parent, text="Quit", bg= "black", fg=consts.PRIMARY, font=(consts.MAIN_FONT, 14, BOLD), command=self._show_main_menu_frame)
         b.grid(row=4, column=0, sticky = "new")
         frame_for_side_bar.grid(row=1, column=0, rowspan=4, sticky = "nsew")
 
@@ -308,7 +311,7 @@ class BoggleUserInterface(object):
         l2 = tk.Label(frame, text = consts.RULES, bg=consts.SECONDARY, font = (consts.MAIN_FONT, 14), wraplength=600, justify=LEFT)
         l3 = tk.Label(frame, text = "About", bg=consts.SECONDARY,  font = (consts.MAIN_FONT, 18, BOLD), justify=LEFT)
         l4 = tk.Label(frame, text = consts.ABOUT, bg=consts.SECONDARY, font = (consts.MAIN_FONT, 14), wraplength=600, justify=LEFT)
-        button = tk.Button(frame, background = consts.ORANGE, text = "Back", font=(consts.MAIN_FONT, 18), command = lambda play = False: self._show_main_menu_frame(play))
+        button = tk.Button(frame, background = consts.BLACK, fg = consts.PRIMARY, text = "Back", font=(consts.MAIN_FONT, 18, BOLD), command = lambda play = False: self._show_main_menu_frame(play))
         button.place(relx = 0.1, rely = 0.9, anchor = CENTER, width = 100, height = 50)
         frame.grid(row=0, column=0, sticky="nsew")
         for l in [l1, l2, l3, l4]:
@@ -322,6 +325,8 @@ class BoggleUserInterface(object):
         """
         for row in self.buttons_board:
             for b in row:
+                if self.game._used_locations and b.cget('bg') == consts.PLAYER_CHOOSING_COLOR:
+                    continue
                 b.configure(bg=consts.ORANGE)
 
 
@@ -333,13 +338,16 @@ class BoggleUserInterface(object):
         """
         self.clean_markings_from_board()
         x, y = location
-        for x_mod, y_mod in consts.DIRECTIONS:
+        for x_mod, y_mod in consts.DIRECTIONS + [(0,0)]:
             try:
                 new_x, new_y = x+x_mod, y+y_mod
                 if new_x < 0 or new_y < 0:
                     raise IndexError
-                b = self.buttons_board[x+x_mod][y+y_mod]
-                b.configure(bg="#ff8c66")
+                b = self.buttons_board[new_x][new_y]
+                if (new_x, new_y) in self.game._used_locations:
+                    b.configure(bg=consts.PLAYER_CHOOSING_COLOR)
+                else:
+                    b.configure(bg=consts.NEXT_MOVE_COLOR)
             except (KeyError, IndexError):
                 pass
 
