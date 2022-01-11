@@ -1,25 +1,6 @@
 from typing import List, Set, Tuple
 import consts
 
-def __filter_words_for_max_score(board, words) -> List[str]:
-    """
-    filters words for the max score method (see max_score_paths)
-    :param board: a two dimensional list representing a Boggle board
-    :param words: the words to look from
-    :return: the list of filtered words fitting for the method
-    """
-    essential_chars = []
-    filtered_words = []
-    for row in board:
-        for cell in row:
-            essential_chars.append(cell)
-    for word in words:
-        for char in word:
-            if char in essential_chars:
-                filtered_words.append(word)
-                break
-    return filtered_words
-
 def is_near_previous(previous, current) -> bool:
     """
     checks if a given location is near another one
@@ -177,7 +158,6 @@ def max_score_paths(board: List[List[Tuple[int,int]]], words: List[str]) -> List
     :param board: a 2 dimensional board which represnets the Boggle board
     :param words: the avilable words to look. only matches paths which represents words in the words set will be returned
     """
-    words = __filter_words_for_max_score(board, words)
     max_word_length = 0 #initlazing
     words = set(words)
     for word in words:
@@ -203,14 +183,14 @@ def __max_score_paths_core(board: List[List[Tuple[int,int]]], words: Set[str], w
     """
     y, x = cur_location[0], cur_location[1]
     word += board[y][x]
-
-    if len(word) > max_word_length:
-        return
     
     used_locations.append(cur_location)
     
     if word in words:
         all_paths.append((word, used_locations))
+    
+    if len(word) + 1 > max_word_length:
+        return
 
     for y_mod, x_mod in consts.DIRECTIONS:
         new_y, new_x = y + y_mod, x + x_mod
