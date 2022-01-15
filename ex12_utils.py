@@ -47,25 +47,6 @@ def is_valid_path(board, path, words):
         if word == path_word:
             return word
     return None
-    
-def __are_locations_legal(locations: List[Tuple[int,int]]) -> bool:
-    """
-    checks if a list of tuples, which represents locations are valid and legal to a Boggle game board
-    :param locations: the list of locations described
-    :return: True if it is, False otherwise
-    """
-    used_locations = []
-    for i , location in enumerate(locations):
-        if i != 0:
-            if not is_near_previous(locations[i-1], location):
-                return False
-        y,x = location[0],location[1]
-        if not(0 <= y <= 3 and 0 <= x <= 3):
-            return False
-        if location in used_locations:
-            return False
-        used_locations.append(location)
-    return True
 
 def find_length_n_paths(n: int, board: List[List[Tuple[int,int]]], words: List[str]) -> List[List[Tuple[int,int]]]:
     """
