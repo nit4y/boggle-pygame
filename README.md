@@ -4,7 +4,7 @@ This is a boggle game written entirely in Python (pygame)
 ## Music
 We don't own the music here. It is CD Projekt RED property (thats actually some The Witcher 3 music added for fun).
 
-Notable features:
+## Notable features:
 1. Square marking for next possible move -
 with each move the user makes the game will mark the next possible movments on the board
 
