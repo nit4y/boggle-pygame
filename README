@@ -1,5 +1,7 @@
-Our project features all the must have features described in ex12.pdf AND:
+# Boggle in Pygame
+This is a boggle game written entirely in Python (pygame)
 
+Notable features:
 1. Square marking for next possible move -
 with each move the user makes the game will mark the next possible movments on the board
 
